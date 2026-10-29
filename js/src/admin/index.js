@@ -28,7 +28,8 @@ const THEMES = {
 };
 
 app.initializers.add(ID, () => {
-  const ext = app.extensionData.for(ID);
+  const reg = app.registry || app.extensionData;
+  const ext = reg.for(ID);
   const bool = (k, label, help) => ext.registerSetting({ setting: P + k, type: 'boolean', label, help });
   const text = (k, label, help) => ext.registerSetting({ setting: P + k, type: 'text', label, help });
   const num = (k, label, min, max, help) =>
