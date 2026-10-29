@@ -12,9 +12,9 @@
         }
     ],
     "support": {
-    "issues": "https://github.com/PeopleInside/festive-decorations/issues",
-    "source": "https://github.com/PeopleInside/festive-decorations"
-},
+        "issues": "https://github.com/PeopleInside/festive-decorations/issues",
+        "source": "https://github.com/PeopleInside/festive-decorations"
+    },
     "require": {
         "php": ">=8.2",
         "flarum/core": "^2.0"
