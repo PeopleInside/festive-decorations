@@ -2,6 +2,12 @@
 
 Porting del plugin WordPress "Decorazioni Festive".
 
+[![Latest Stable Version](https://img.shields.io/packagist/v/peopleinside/festive-decorations?label=packagist&color=f28d1a)](https://packagist.org/packages/peopleinside/festive-decorations)
+[![Total Downloads](https://img.shields.io/packagist/dt/peopleinside/festive-decorations)](https://packagist.org/packages/peopleinside/festive-decorations)
+[![License](https://img.shields.io/packagist/l/peopleinside/festive-decorations)](https://github.com/PeopleInside/festive-decorations/blob/main/LICENSE)
+[![PHP Version](https://img.shields.io/packagist/dependency-v/peopleinside/festive-decorations/php)](https://packagist.org/packages/peopleinside/festive-decorations)
+[![Flarum](https://img.shields.io/badge/Flarum-2.x-e7672e)](https://flarum.org)
+
 ## Disclaimer
 
 This software is provided **"AS IS"**, without any warranty. While it has been tested and reasonable efforts are made to ensure security and reliability, no guarantees are provided. As an open project, anyone may contribute or report issues, but this does not imply endorsement or liability from the maintainers.
