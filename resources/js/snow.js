@@ -1,5 +1,9 @@
 ;(function(){
-  var cfg = (window.DFEST && window.DFEST.snow) || {};
+  var c = window.DFEST;
+  if (!c || !c.enabled || !c.snow) {
+    return;
+  }
+  var cfg = c.snow;
   const SNOW_CONFIG = {
     initialFlakes: cfg.initial || 140,
     flakesOnReenable: cfg.initial || 140,

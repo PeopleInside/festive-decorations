@@ -1,7 +1,7 @@
 ;(function(){
 'use strict';
 var c = window.DFEST;
-if (!c || !c.theme) { return; }
+if (!c || !c.enabled || !c.theme) { return; }
 var t = c.theme;
 
 function all(sel){ if(!sel){return [];} try{ return Array.prototype.slice.call(document.querySelectorAll(sel)); }catch(e){ return []; } }

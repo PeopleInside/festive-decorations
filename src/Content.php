@@ -51,12 +51,6 @@ class Content
         return max($min, min($max, abs((int) $v)));
     }
 
-    private static function asset(string $file): string
-    {
-        $p = dirname(__DIR__) . '/resources/' . $file;
-        return is_file($p) ? (string) file_get_contents($p) : '';
-    }
-
     public function __invoke(Document $document, ServerRequestInterface $request): void
     {
         $o = $this->load();
@@ -106,6 +100,7 @@ class Content
         }
 
         $config = [
+            'enabled'      => true,
             'theme' => $t ? [
                 'emojis'    => array_values(array_filter(explode(' ', $t['strip']))),
                 'mark'      => $t['menu'],
@@ -120,26 +115,25 @@ class Content
             'menuHost'     => self::sel($o['menu_host']),
             'menuItemsSel' => self::sel($o['menu_items_sel']),
             'christmas'    => $xmas,
-            'snow'         => ['initial' => self::n($o['snow_count'], 1, 500), 'max' => self::n($o['snow_max'], 1, 800)],
-            'ff'           => ['count' => self::n($o['ff_count'], 1, 100), 'speed' => self::n($o['ff_speed'], 1, 10), 'mode' => $o['ff_mode'] === 'first' ? 'first' : 'always'],
+            'snow'         => ($snow || $xmas) ? [
+                'initial' => self::n($o['snow_count'], 1, 500),
+                'max'     => self::n($o['snow_max'], 1, 800),
+            ] : null,
+            'hats'         => ($xmas && self::b($o['xmas_hats'])),
+            'ff'           => $ff ? [
+                'count' => self::n($o['ff_count'], 1, 100),
+                'speed' => self::n($o['ff_speed'], 1, 10),
+                'mode'  => $o['ff_mode'] === 'first' ? 'first' : 'always',
+            ] : null,
+            'fxToggle'     => self::b($o['fx_toggle']),
         ];
 
-        /* CSS */
+        /* CSS dinamico (solo variabili e custom CSS - gli stili statici sono compilati in forum.less) */
         $css = ':root{--dfest-accent:' . $accent . ';}';
         if ($t) {
             $q = fn ($e) => 'content:"' . $e . '";content:"' . $e . '" / "";';
             $css .= '.dfest-h1::before{' . $q($t['title'][0]) . 'display:inline-block;margin-right:.35em;transform-origin:50% 90%;}';
             $css .= '.dfest-h1::after{' . $q($t['title'][1]) . 'display:inline-block;margin-left:.35em;transform-origin:50% 90%;}';
-            $css .= self::asset('css/decor.css');
-        }
-        if ($xmas) {
-            $css .= self::asset('css/christmas.css');
-        }
-        if ($snow || $xmas) {
-            $css .= self::asset('css/snow.css');
-        }
-        if ($ff) {
-            $css .= self::asset('css/fireflies.css');
         }
         if (! self::b($o['fx_toggle'])) {
             $css .= '#toggleSnow,#magicToggle{display:none!important;}';
@@ -147,22 +141,13 @@ class Content
         if ($o['custom_css'] !== '') {
             $css .= "\n" . strip_tags($o['custom_css']);
         }
-        $document->head[] = '<style id="dfest-css">' . $css . '</style>';
+        $document->head[] = '<style id="dfest-dynamic-css">' . $css . '</style>';
 
-        /* JS */
+        /* Configurazione dinamica iniettata nell\'head (il JS statico è servito da forum.js) */
         $js = 'window.DFEST=' . json_encode($config, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) . ';';
-        if ($t) {
-            $js .= self::asset('js/decor.js');
+        if ($xmas) {
+            $js .= 'document.documentElement.classList.add("dfest-xmas");';
         }
-        if ($snow || $xmas) {
-            $js .= self::asset('js/snow.js');
-        }
-        if ($xmas && self::b($o['xmas_hats'])) {
-            $js .= self::asset('js/hats.js');
-        }
-        if ($ff) {
-            $js .= self::asset('js/fireflies.js');
-        }
-        $document->foot[] = '<script id="dfest-js">' . str_replace('</script', '<\/script', $js) . '</script>';
+        $document->head[] = '<script id="dfest-config">' . $js . '</script>';
     }
 }

@@ -1,6 +1,10 @@
 ;(function(){
 function initFireflies() {
-    var C = (window.DFEST && window.DFEST.ff) || {};
+    var c = window.DFEST;
+    if (!c || !c.enabled || !c.ff) {
+        return;
+    }
+    var C = c.ff;
 
     const container = document.getElementById('magicContainer') || (() => {
         const c = document.createElement('div');
