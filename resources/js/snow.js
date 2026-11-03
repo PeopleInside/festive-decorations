@@ -66,26 +66,36 @@
     });
   }
 
-  currentThemeLight = isLightTheme();
-  createToggleButton(snowActive, currentThemeLight);
-  startSnow(currentThemeLight);
+  function initSnow() {
+    currentThemeLight = isLightTheme();
+    createToggleButton(snowActive, currentThemeLight);
+    startSnow(currentThemeLight);
 
-  if (window.matchMedia) {
-    const themeQuery = window.matchMedia('(prefers-color-scheme: light)');
-    themeQuery.addEventListener('change', updateThemeAppearance);
+    if (window.matchMedia) {
+      const themeQuery = window.matchMedia('(prefers-color-scheme: light)');
+      themeQuery.addEventListener('change', updateThemeAppearance);
+    }
+
+    if (document.body) {
+      const bodyObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            updateThemeAppearance();
+            break;
+          }
+        }
+      });
+      bodyObserver.observe(document.body, { attributes: true });
+    }
+
+    setInterval(updateThemeAppearance, 2000);
   }
 
-  const bodyObserver = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        updateThemeAppearance();
-        break;
-      }
-    }
-  });
-  bodyObserver.observe(document.body, { attributes: true });
-
-  setInterval(updateThemeAppearance, 2000);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSnow);
+  } else {
+    initSnow();
+  }
 
   function startSnow(isLight) {
     const canvas = document.getElementById('snow') || createCanvas();

@@ -35,6 +35,15 @@ class Decor
         return ['capodanno', 'natale', 'halloween', 'carnevale', 'sanvalentino', 'festadonna', 'pasqua', 'festamamma', 'pride', 'primavera', 'estate', 'autunno', 'inverno', 'cuori'];
     }
 
+    public static function booleanKeys(): array
+    {
+        $keys = ['enabled', 'heading', 'logo', 'menu', 'xmas_hats', 'fx_toggle'];
+        foreach (self::eventKeys() as $k) {
+            $keys[] = 'ev_' . $k;
+        }
+        return $keys;
+    }
+
     public static function defaults(): array
     {
         $d = [
@@ -75,9 +84,10 @@ class Decor
     }
 
     /** "GG/MM" => MMDD */
-    public static function parseMd(string $s, int $dd, int $mm): int
+    public static function parseMd(?string $s, int $dd, int $mm): int
     {
-        if (preg_match('/^(\d{1,2})[\/\-\.](\d{1,2})$/', trim($s), $x)) {
+        $str = trim((string) $s);
+        if ($str !== '' && preg_match('/^(\d{1,2})[\/\-\.](\d{1,2})$/', $str, $x)) {
             $dd = max(1, min(31, (int) $x[1]));
             $mm = max(1, min(12, (int) $x[2]));
         }

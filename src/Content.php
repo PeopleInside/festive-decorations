@@ -16,10 +16,22 @@ class Content
 
     private function load(): array
     {
+        $defaults = Decor::defaults();
+        $booleanKeys = Decor::booleanKeys();
         $o = [];
-        foreach (Decor::defaults() as $k => $d) {
+        foreach ($defaults as $k => $d) {
             $v = $this->settings->get(Decor::P . $k);
-            $o[$k] = ($v === null || ($v === '' && $k !== 'custom_css')) ? $d : $v;
+            if (in_array($k, $booleanKeys, true)) {
+                // If setting was never stored in DB, fallback to default.
+                // If stored in DB, '', '0', 0, false all represent disabled (false).
+                if ($v === null) {
+                    $o[$k] = $d;
+                } else {
+                    $o[$k] = self::b($v) ? '1' : '0';
+                }
+            } else {
+                $o[$k] = ($v === null || ($v === '' && $k !== 'custom_css')) ? $d : $v;
+            }
         }
         return $o;
     }
@@ -72,15 +84,25 @@ class Content
         $effect = $o['effect'];
         $xmas = $snow = $ff = false;
         if ($effect === 'auto') {
+            // Natale: sostituisce la neve normale nel periodo natalizio
             $xmas = Decor::inRange($md, Decor::parseMd($o['xmas_start'], 1, 12), Decor::parseMd($o['xmas_end'], 6, 1));
+
+            // Neve: nel periodo neve fuori dal periodo natalizio
             $snow = ! $xmas && Decor::inRange($md, Decor::parseMd($o['snow_start'], 25, 10), Decor::parseMd($o['snow_end'], 7, 1));
-            $ff   = ! $xmas && ! $snow && Decor::inRange($md, Decor::parseMd($o['ff_start'], 8, 1), Decor::parseMd($o['ff_end'], 24, 10));
+
+            // Lucciole: nel periodo lucciole fuori dal periodo neve e natalizio
+            $ff = ! $xmas && ! $snow && Decor::inRange($md, Decor::parseMd($o['ff_start'], 8, 1), Decor::parseMd($o['ff_end'], 24, 10));
         } elseif ($effect === 'christmas') {
             $xmas = true;
         } elseif ($effect === 'snow') {
             $snow = true;
         } elseif ($effect === 'fireflies') {
             $ff = true;
+        }
+
+        // Se nessun tema ed effetto è attivo e non c'è CSS personalizzato, non iniettare nulla
+        if (! $t && ! $xmas && ! $snow && ! $ff && trim($o['custom_css']) === '') {
+            return;
         }
 
         $config = [
