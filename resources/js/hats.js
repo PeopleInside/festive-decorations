@@ -1,4 +1,8 @@
 ;(function () {
+  var c = window.DFEST;
+  if (!c || !c.enabled || !c.christmas || !c.hats) {
+    return;
+  }
   const AVATAR_SELECTOR = 'span.Avatar, img.Avatar';
   const svgns = 'http://www.w3.org/2000/svg';
   const MIN_AVATAR_SIZE = 32;
