@@ -14,7 +14,11 @@ foreach (Decor::defaults() as $key => $value) {
 }
 
 return [
-    (new Extend\Frontend('forum'))->content(Content::class),
-    (new Extend\Frontend('admin'))->js(__DIR__ . '/js/dist/admin.js'),
+    (new Extend\Frontend('forum'))
+        ->css(__DIR__ . '/resources/less/forum.less')
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->content(Content::class),
+    (new Extend\Frontend('admin'))
+        ->js(__DIR__ . '/js/dist/admin.js'),
     $settings,
 ];

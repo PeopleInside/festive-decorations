@@ -1,6 +1,6 @@
 {
   "name": "@peopleinside/festive-decorations",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "private": true,
   "prettier": "@flarum/prettier-config",
   "dependencies": {
