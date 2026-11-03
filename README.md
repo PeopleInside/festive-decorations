@@ -5,7 +5,6 @@ Porting del plugin WordPress "Decorazioni Festive".
 ## Installazione
 Copia la cartella in `extensions/festive-decorations` (nella root di Flarum), poi:
 
-    composer config repositories.festive path extensions/festive-decorations
     composer require peopleinside/festive-decorations
     php flarum cache:clear
 
