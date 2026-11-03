@@ -35,6 +35,15 @@ class Decor
         return ['capodanno', 'natale', 'halloween', 'carnevale', 'sanvalentino', 'festadonna', 'pasqua', 'festamamma', 'pride', 'primavera', 'estate', 'autunno', 'inverno', 'cuori'];
     }
 
+    public static function booleanKeys(): array
+    {
+        $keys = ['enabled', 'heading', 'logo', 'menu', 'xmas_hats', 'fx_toggle'];
+        foreach (self::eventKeys() as $k) {
+            $keys[] = 'ev_' . $k;
+        }
+        return $keys;
+    }
+
     public static function defaults(): array
     {
         $d = [
