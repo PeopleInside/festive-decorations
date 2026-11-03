@@ -84,30 +84,14 @@ class Content
         $effect = $o['effect'];
         $xmas = $snow = $ff = false;
         if ($effect === 'auto') {
-            $isNataleOn = self::b($o['ev_natale']);
-            $isWinterOn = self::b($o['ev_inverno']);
-            $isAutumnOn = self::b($o['ev_autunno']);
-            $isSpringOn = self::b($o['ev_primavera']);
-            $isSummerOn = self::b($o['ev_estate']);
+            // Natale: sostituisce la neve normale nel periodo natalizio
+            $xmas = Decor::inRange($md, Decor::parseMd($o['xmas_start'], 1, 12), Decor::parseMd($o['xmas_end'], 6, 1));
 
-            // Natale: solo se l'evento Natale è abilitato e siamo nelle date natalizie
-            $xmas = $isNataleOn && Decor::inRange($md, Decor::parseMd($o['xmas_start'], 1, 12), Decor::parseMd($o['xmas_end'], 6, 1));
+            // Neve: nel periodo neve fuori dal periodo natalizio
+            $snow = ! $xmas && Decor::inRange($md, Decor::parseMd($o['snow_start'], 25, 10), Decor::parseMd($o['snow_end'], 7, 1));
 
-            // Neve: solo se la stagione attiva corrente è abilitata
-            $inSnowSeason = ($md >= 1201 || $md <= 107) ? $isWinterOn : $isAutumnOn;
-            $snow = ! $xmas && $inSnowSeason && Decor::inRange($md, Decor::parseMd($o['snow_start'], 25, 10), Decor::parseMd($o['snow_end'], 7, 1));
-
-            // Lucciole: solo se la stagione attiva corrente è abilitata
-            if ($md >= 320 && $md <= 620) {
-                $inFfSeason = $isSpringOn;
-            } elseif ($md >= 621 && $md <= 922) {
-                $inFfSeason = $isSummerOn;
-            } elseif ($md >= 923 && $md <= 1130) {
-                $inFfSeason = $isAutumnOn;
-            } else {
-                $inFfSeason = $isWinterOn;
-            }
-            $ff = ! $xmas && ! $snow && $inFfSeason && Decor::inRange($md, Decor::parseMd($o['ff_start'], 8, 1), Decor::parseMd($o['ff_end'], 24, 10));
+            // Lucciole: nel periodo lucciole fuori dal periodo neve e natalizio
+            $ff = ! $xmas && ! $snow && Decor::inRange($md, Decor::parseMd($o['ff_start'], 8, 1), Decor::parseMd($o['ff_end'], 24, 10));
         } elseif ($effect === 'christmas') {
             $xmas = true;
         } elseif ($effect === 'snow') {
