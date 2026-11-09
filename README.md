@@ -3,10 +3,21 @@
 Porting del plugin WordPress "Decorazioni Festive".
 
 ## Installazione
-Copia la cartella in `extensions/festive-decorations` (nella root di Flarum), poi:
 
     composer require peopleinside/festive-decorations
     php flarum cache:clear
+
+# Decorazioni Festive per Flarum 2.x
+
+Porting dell'omonimo plugin WordPress "Decorazioni Festive", adattato per l'ecosistema Flarum.
+
+⚠️ Disclaimer
+This software is provided "AS IS", without any warranty. While it has been tested and reasonable efforts are made to ensure security and reliability, no guarantees are provided. As an open project, anyone may contribute or report issues, but this does not imply endorsement or liability from the maintainers.
+You use this software entirely at your own risk. The authors and contributors are not liable for any damages, data loss, or unexpected behavior resulting from its use, modification, or distribution. Always review and test the code independently before deploying it in critical or production environments.
+
+## 📦 Installazione
+
+Copia la cartella in `extensions/festive-decorations` (nella root di Flarum), poi esegui:
 
 Abilita l'estensione dal pannello admin e configurala dalla sua pagina impostazioni.
 
@@ -21,8 +32,3 @@ Adatta i selettori CSS dalle impostazioni (titolo, logo, voci menù, contenitore
 
 ## Ricompilare i bundle JS (opzionale)
     cd js && npm install && npm run build
-
-## Novità versione 1.0.5
-- **Performance e caching**: eliminato il caricamento sincrono su disco (`file_get_contents`) ad ogni richiesta per gli asset statici CSS e JS.
-- **Integrazione nativa Flarum 2.x**: gli stili statici sono ora compilati nel bundle CSS del forum (`resources/less/forum.less`) e gli script nel bundle JS (`js/dist/forum.js`), sfruttando la cache HTTP del browser e dei CDN.
-- **Configurazione dinamica ultra-leggera**: solo l'oggetto `window.DFEST` e le variabili CSS dinamiche del tema corrente vengono iniettati nell'head HTML.
