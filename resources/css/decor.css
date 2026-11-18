@@ -16,3 +16,5 @@
 .dfest-garland span{animation:dfest-swing 3.5s ease-in-out infinite;}
 .dfest-badge{animation:dfest-bob 3s ease-in-out infinite;}
 }
+/* Con il banner FoF Terms visibile il festone diventa semitrasparente e non lo copre */
+html:has(.Alert--undefined) .dfest-garland{opacity:.25;transition:opacity .25s ease;}
