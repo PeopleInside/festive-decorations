@@ -16,6 +16,6 @@
 .dfest-garland span{animation:dfest-swing 3.5s ease-in-out infinite;}
 .dfest-badge{animation:dfest-bob 3s ease-in-out infinite;}
 }
-/* I banner/avvisi di Flarum (es. FoF Terms) devono stare sopra a festone e decorazioni */
-.Alert{position:relative;z-index:10001;}
-.dfest-garland{z-index:0;}
+/* Il festone pende sotto l'header: i banner di Flarum (es. FoF Terms) si abbassano per non finirci sotto, senza alterare i z-index */
+html:has(.dfest-garland) .Alert{margin-top:2.2rem;}
+html.dfest-xmas .Alert{margin-top:28px;}
