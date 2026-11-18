@@ -16,5 +16,5 @@
 .dfest-garland span{animation:dfest-swing 3.5s ease-in-out infinite;}
 .dfest-badge{animation:dfest-bob 3s ease-in-out infinite;}
 }
-/* Mentre è visibile un banner/avviso di Flarum (es. FoF Terms) il festone si nasconde: il banner non viene modificato */
-html:has(.Alert) .dfest-garland{display:none;}
+/* Mentre è visibile un banner/avviso di Flarum (es. FoF Terms) il festone diventa semitrasparente: il banner resta leggibile e non viene modificato */
+html:has(.Alert) .dfest-garland{opacity:.3;transition:opacity .25s ease;}
